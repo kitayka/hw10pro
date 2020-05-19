@@ -1,9 +1,28 @@
 "use strict";
+const slider = document.querySelector('.slider');
+const items = slider.querySelectorAll('.slider-item');
+const scrollBtns = document.createElement('div');
+scrollBtns.classList.add('scroll_btns');
+slider.append(scrollBtns);
 
-const next = document.querySelector('.right-btn');
-const prev = document.querySelector('.left-btn');
-const items = document.querySelectorAll('.slider-item');
-const scrollBtns = document.querySelectorAll('.scroll_btn');
+items.forEach(function add(items, index) {
+    const scrollBtn = document.createElement('button');
+    scrollBtn.classList.add('scroll_btn');
+    scrollBtns.append(scrollBtn);
+    const span = document.createElement('span');
+    span.classList.add('not-visible');
+    scrollBtn.append(span);
+    let textNode = document.createTextNode(Number(++index));
+    span.append(textNode);
+});
+
+scrollBtns.firstChild.classList.add('scroll__active');
+const prev = document.createElement('button');
+prev.classList.add("arrow_btn", "left-btn");
+slider.append(prev);
+const next = document.createElement('button');
+next.classList.add("arrow_btn", "right-btn");
+slider.append(next);
 
 
 function playSlider(items, prev, next) {
@@ -12,10 +31,10 @@ function playSlider(items, prev, next) {
 
     next.addEventListener('click', function (element) {
         element.preventDefault();
-        removeStyle(); 
+        removeStyle();
         numberOfSlide++;
         if (numberOfSlide == items.length) { numberOfSlide = 0; }
-        slideShow(); 		
+        slideShow();
     });
 
     prev.addEventListener('click', function (element) {
@@ -26,7 +45,13 @@ function playSlider(items, prev, next) {
         slideShow();
     });
 
-    scrollBtns.forEach(function (element) {  
+
+    let pseudoArray = scrollBtns.children;
+    let array = [];
+    for (let i = 0; i < pseudoArray.length; i++) {
+        array.push(pseudoArray[i]);
+    }
+    array.forEach(function (element) {
         element.addEventListener('click', function (elem) {
             elem.preventDefault();
             removeStyle();
@@ -35,21 +60,21 @@ function playSlider(items, prev, next) {
         });
     });
 
-    
+
     function removeStyle() {
         items.forEach(function (item) {
             item.classList.remove('slider-play');
         });
 
-        scrollBtns.forEach(function (scrollBtns) {
-            scrollBtns.classList.remove('scroll__active');
+        array.forEach(function (array) {
+            array.classList.remove('scroll__active');
         });
     }
 
 
     function slideShow() {
         items[numberOfSlide].classList.add('slider-play');
-        scrollBtns[numberOfSlide].classList.add('scroll__active');
+        array[numberOfSlide].classList.add('scroll__active');
     }
 }
 
